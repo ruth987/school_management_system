@@ -1,0 +1,404 @@
+#include<iostream>
+#include<stdlib.h>
+#include<cmath>
+#include<bits/stdc++.h>
+using namespace std;
+//variable declarations
+int choice_1;
+int choice_2;
+int choice_3;
+string student_ID;
+double num_of_students = 6;//we can change the amount of students at any time and editthe array declaration of array_ID
+double num;
+int subject_index;
+int student_index;
+int ID_index;
+double sum_mark = 0;
+double ave_mark;
+double mini_line;
+double student;
+double subject;
+double total_cr_hr =0;
+double sum_c;
+double cred_sum;
+double desc;
+int var = 0;
+int found_index;//the index where the searched student is found.
+int top1_index;
+int top2_index;
+int top3_index;
+int top4_index;
+int top5_index;
+int j;
+double top1_student_mark ;
+double top2_student_mark ;
+double top3_student_mark ;
+double top4student_mark ;
+double top5_student_mark ;
+string ID;
+//function declarations
+string ID_taker ();
+double mark_taker ();
+double average_mark();
+string grade_letter ();
+double CGPA();
+double credit_hr ();
+void search_student ();
+string top_students();
+string straight_line ();
+//array declaration
+string subjects[6] = {"Programming" , "Discrete Maths ", "Introduction to SE", "Economics", "Global Trend", "History"};
+string array_ID[6];
+double student_mark[6][6];//student mark--> subject index , student index
+string g_letter[6][6];//stores grade letters
+double cred_hr[6];
+double av_mark[6];
+double CGPA_arr[6];
+double sorted_avMark[6];
+string sorted_ID[6];
+int main()
+{
+
+ do
+ {
+ //main menu
+ home_page:
+ cout <<"HELLO, EVERYONE! \nWELCOME. If you wanna login press one."<<endl;
+ cout <<"1. LOGIN"<<endl<<"2. EXIT"<<endl;
+ cin >> choice_1;
+ system("CLS");
+ switch (choice_1)
+ {
+ case 1:
+ ID_taker ();
+ system("CLS");
+ mark_taker ();
+ credit_hr ();
+ average_mark();
+ grade_letter();
+ CGPA();
+ system("CLS");
+ //sub menu
+ main_menu:
+ cout <<"Pick the number that has what you want : "<<endl;
+ cout<<"1. Student's Mark Sheet\n"
+ <<"2. Search For Specific Students\n"
+ <<"3. Top Five Ranked Students"<<endl;
+ cin >> choice_2;
+ system("CLS");
+ switch(choice_2)//switch statement for the submenu
+ {
+ case 1:
+ cout <<"\t\t\t\t\t\tSTUDENT'S MARK SHEET"<<endl;
+ straight_line();
+ cout <<"\nstud.ID\t\tProgramming \t  D.maths \t  ISE \t\tEconomics \t  G.trend \t  History \t\tAverage\t\t\tCGPA "<<endl;
+ straight_line();
+ cout<<"\n";
+ cout <<"\t\t";
+ for (int i = 1; i <= 6; i++)
+ {
+ cout<<"Mark : Grade\t";
+ }
+ cout <<endl;
+ cout<<"\n";
+ straight_line();
+ for (student_index = 0; student_index < num_of_students; student_index++ )
+ {
+ cout <<array_ID[student_index]<<"\t\t";
+ for (subject_index = 0; subject_index < 6; subject_index++)
+ {
+ cout <<student_mark[student_index][subject_index]<<" : "<< g_letter[
+student_index][subject_index]<<"\t\t";
+ }
+ cout<<"\t"<<av_mark[student_index];
+ cout <<"\t\t\t"<<CGPA_arr[student_index];
+ cout <<endl;
+ }
+ cout<<"\n\n\n\n";
+ break;
+ case 2:
+ search_student();
+ break ;
+ case 3:
+ top_students();
+ break;
+ default:
+ cout <<"Please, choose a number that is one to three."<<endl;
+ }
+ above_option:
+ cout <<"Input the number that has what you want to do next : \n";
+ cout <<"1. Go back to the main menu \n2. Go to the login page \n3. Exit"<<endl;
+ cin >> choice_3;
+ system("CLS");
+ if (choice_3 == 1)
+ {
+ goto main_menu;
+ }
+ else if (choice_3 == 2)
+ {
+ goto home_page;
+ }
+ if (choice_3 == 3)
+ {
+ choice_1 = 2;
+ }
+ else
+ {
+ cout<<"The number you chose isnot part of the option.\n Enter again: ";
+ goto above_option;
+ }
+ break;
+ case 2:
+ //exit
+ cout <<"BYE! Have a good day!"<<endl;
+ break;
+ default :
+ //for a choice different from one or two
+ cout <<"SORRY ! You can only choose either one or two."<<endl;
+ }
+ }
+ while(choice_1 != 2);
+ return 0;
+}
+string ID_taker ()
+{
+ cout <<"Enter the ID of the students(Do not use /13, It is already included!)"<<endl;
+ for (int index = 0; index < num_of_students; index++)
+ {
+ cout<< "Student "<<index+1<<" ID : ";
+ cin >> array_ID[index];
+ }
+ return array_ID[1];
+}
+double mark_taker ()
+{
+ cout <<"ENTER THE MARK OF THE STUDENTS "<<endl;
+ cout <<"------------------------------ "<<endl;
+ for (student_index = 0; student_index < 6; student_index++)
+ {
+ cout <<"Enter the student's mark on "<<subjects[student_index]<<" : "<<endl;
+ for (subject_index = 0; subject_index < num_of_students; subject_index++ )
+ {
+ cout<<"Student "<<subject_index+1<<" ( ID : "<<array_ID[subject_index]<<" ) =";
+ cin>> student_mark[student_index][subject_index];
+ }
+ system("CLS");
+ cout <<endl;
+ }
+ return 0;
+}
+double average_mark()
+{
+ for (student_index = 0; student_index < num_of_students; student_index++ )
+ {
+ sum_mark = 0;
+ for (subject_index = 0; subject_index < 6; subject_index++)
+ {
+ sum_mark = sum_mark + student_mark[student_index][subject_index];
+ }
+ ave_mark = sum_mark/6;
+ //cout << ave_mark << endl ;
+ av_mark[student_index] = ave_mark;
+ //<<array_ID[student_index]
+ }
+ return 0;
+ //return ave_mark;
+}
+string grade_letter (void)
+{
+ cout <<"Grade letter of students for each subject : "<<endl;
+ for (student_index = 0; student_index < num_of_students; student_index++ )
+ {
+ for (subject_index = 0; subject_index < 6; subject_index++)
+ {
+ if(student_mark[student_index][subject_index] >= 90)
+ {
+ g_letter[student_index][subject_index] = "A+";
+ // cout <<student_mark[student_index][subject_index] <<" : "<< "A+";
+ }
+ else if (student_mark[student_index][subject_index] >= 80 && student_mark[
+student_index][subject_index] < 90 )
+ {
+ g_letter[student_index][subject_index] = "A-";
+ //cout<<student_mark[student_index][subject_index] <<" : "<<"A-";
+ }
+ else if (student_mark[student_index][subject_index] >= 60 && student_mark[
+student_index][subject_index] < 70)
+ {
+ g_letter[student_index][subject_index] = "B+";
+ //cout<<student_mark[student_index][subject_index] <<" : "<< "B+";
+ }
+ else if (student_mark[student_index][subject_index] >= 50 && student_mark[
+student_index][subject_index] < 60)
+ {
+ g_letter[student_index][subject_index] = "B";
+ // cout<<student_mark[student_index][subject_index] <<" : "<<"B";
+ }
+ else if (student_mark[student_index][subject_index] >= 40 && student_mark[
+student_index][subject_index] < 50)
+ {
+ g_letter[student_index][subject_index] = "C+";
+ //cout<<student_mark[student_index][subject_index] <<" : "<< "C+";
+ }
+ else if (student_mark[student_index][subject_index] >= 50)
+ {
+ g_letter[student_index][subject_index] = "D";
+ //cout<<student_mark[student_index][subject_index] <<" : "<<"D";
+ }
+ else if (student_mark[student_index][subject_index] < 40)
+ {
+ g_letter[student_index][subject_index] = "F";
+ // cout<<student_mark[student_index][subject_index] <<" : "<<"F";
+ }
+ }
+ cout<<endl;
+ }
+ return "ASER";
+}
+string straight_line()
+{
+ for ( mini_line = 1; mini_line <= 170; mini_line++)
+ {
+ cout <<"_";
+ }
+ cout <<endl;
+return "ruth";
+}
+double credit_hr ()
+{
+ cout << "Enter the credit hour of each course : "<<endl;
+ for (subject_index = 0; subject_index < 6; subject_index++)
+ {
+ cout <<subjects[subject_index]<<" C_hr : ";
+ cin >> cred_hr[subject_index];
+ total_cr_hr += cred_hr[subject_index];
+ }
+ return 0;
+}
+double CGPA()
+{
+ for (student_index = 0; student_index < num_of_students; student_index++ )
+ {
+ sum_c = 0;
+ for (subject_index = 0; subject_index < 6; subject_index++)
+ {
+ if (g_letter[student_index][subject_index] == "A+")
+ {
+ cred_sum = 4 * cred_hr[subject_index];
+ sum_c += cred_sum;
+ }
+ else if (g_letter[student_index][subject_index] == "A-")
+ {
+ cred_sum = 3.5 * cred_hr[subject_index];
+ sum_c += cred_sum;
+ }
+ else if (g_letter[student_index][subject_index] == "B+")
+ {
+ cred_sum = 3 * cred_hr[subject_index];
+ sum_c += cred_sum;
+ }
+ else if (g_letter[student_index][subject_index] == "B")
+ {
+ cred_sum = 2.5 * cred_hr[subject_index];
+ sum_c += cred_sum;
+ }
+ else if (g_letter[student_index][subject_index] == "C+")
+ {
+ cred_sum = 2 * cred_hr[subject_index];
+ sum_c += cred_sum;
+ }
+ else if (g_letter[student_index][subject_index] == "D")
+ {
+ cred_sum = 1.5 * cred_hr[subject_index];
+ sum_c += cred_sum;
+ }
+ else if (g_letter[student_index][subject_index] == "F")
+ {
+ sum_c += 0;
+ }
+ }
+ CGPA_arr[student_index] = sum_c/total_cr_hr;
+ }
+return 0;
+}
+void search_student()
+{
+ cout << "---------------------------SEARCH ASTUDENT---------------------------\n\n\n";
+ cout << "Enter the ID of the student you want to search(Don't forget to put \"ETS\"in the front) : "<<endl;
+ cin >> ID;
+ var = 0;
+ for (ID_index = 0; ID_index < num_of_students; ID_index++)
+ {
+ if (ID == array_ID[ID_index])
+ {
+ var = 1;
+ found_index = ID_index ;
+break;
+ }
+ }
+ if (var == 1)
+ {
+ cout <<"The student is in the list! \n";
+ cout <<"\nstud.ID\t\tProgramming \t  D.maths \t  ISE \t\tEconomics \t  G.trend \t  History \t\t  Average \t\tCGPA "<<endl;
+ straight_line();
+cout<<"\n";
+cout <<"\t\t";
+for (int i = 1; i <= 6; i++)
+ {
+ cout<<"Mark : Grade\t";
+ }
+ cout<<"\n";
+straight_line();
+cout<<"\n";
+cout <<array_ID[found_index]<<"\t";
+ for (subject_index = 0; subject_index < 6; subject_index++)
+ {
+ cout <<"\t"<<student_mark[found_index][subject_index]<<" : "<<
+g_letter[found_index][subject_index]<<"\t";
+ }
+ cout<<"    \t\t"<<av_mark[found_index];
+ cout <<"\t\t\t"<<CGPA_arr[found_index];
+ cout <<"\n\n\n\n";
+ }
+ else
+ {
+ cout <<"\nStudent is not found in the list!!";
+cout <<"\n\n\n\n";
+ }
+}
+string top_students()
+{
+ for(int i = 0; i < num_of_students;i++)
+ {
+ sorted_avMark[i] = av_mark[i];
+ }
+ for(int i = 0; i < num_of_students;i++)
+ {
+ sorted_ID[i] = array_ID[i];
+ }
+ int i, j, desc;
+ string ID_sort;
+ for (student_index = 0; student_index < num_of_students; student_index++) // 'for'loop is used for sorting the numbers in descending order
+ {
+ for (j = student_index+1; j < num_of_students; ++j)
+ {
+ if (sorted_avMark[student_index] < sorted_avMark[j])
+{
+ sorted_avMark[student_index] = sorted_avMark[j];
+ sorted_avMark[j] = desc;
+ ID_sort = sorted_ID [student_index];
+ sorted_ID [student_index]= sorted_ID [j];
+ sorted_ID [j] = ID_sort;
+ }
+ }
+ }
+ cout<<"\n Numbers in Descending Order : \n";
+ for (student_index = 0; student_index < 5; ++student_index)
+ {
+ cout<<"TOP "<<student_index+1<<" : "<<endl;
+ cout<<" ID : "<<sorted_ID[student_index]<<endl;
+ cout<<" AVERAGE : "<<sorted_avMark[student_index]<<endl;
+ }
+ return "aser";
+}
+
